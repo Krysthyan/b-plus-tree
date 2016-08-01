@@ -11,7 +11,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
 
-public class Repositorio<Clase>{
+public class Repositorio<Objecto>{
     private File archivo;
     private int separacion;
     
@@ -22,19 +22,23 @@ public class Repositorio<Clase>{
     }
     
     
-    public int escribir(Clase clase) throws SerializadorException{
+    public int escribir(Objecto objeto) throws SerializadorException{
         ObjectOutputStream ous = null;
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            
             ous = new ObjectOutputStream(bos);
-            ous.writeObject(clase);
+            ous.writeObject(objeto);
             ous.close();
+            
             byte[] cadenaByte = bos.toByteArray();
-            if(cadenaByte.length >= this.separacion){
+            
+            if(cadenaByte.length >= this.separacion)
                 throw new SerializadorException("Error de escritura: Se ha ingresado demasiada información");
-            }
+            
             byte[] tamCadena= ByteBuffer.allocate(4).putInt(cadenaByte.length).array();
             long posicionEscritura;
+            
             try (RandomAccessFile tmp = new RandomAccessFile(archivo, "rw")) {
                 long tamArchivo = tmp.length();
                 posicionEscritura = (long) Math.ceil(tamArchivo/(float)this.separacion)*this.separacion;
@@ -43,6 +47,7 @@ public class Repositorio<Clase>{
                 tmp.write(cadenaByte);
             }
             return (int) (posicionEscritura/this.separacion);
+            
         } catch (IOException ex) {
             throw new SerializadorException("Error al leer el archivo");
         } finally {
@@ -54,7 +59,7 @@ public class Repositorio<Clase>{
         }
     }
     
-    public Clase leer(int pos) throws SerializadorException{
+    public Objecto leer(int pos) throws SerializadorException{
         try (RandomAccessFile tmp = new RandomAccessFile(archivo, "r")) {
             long size = tmp.length();
             tmp.seek(pos*this.separacion);
@@ -74,7 +79,7 @@ public class Repositorio<Clase>{
             tmp.readFully(cadena);
             ByteArrayInputStream bis = new ByteArrayInputStream(cadena);
             ObjectInputStream ois = new ObjectInputStream(bis);
-            Clase clase = (Clase) ois.readObject();
+            Objecto clase = (Objecto) ois.readObject();
             return clase;
         } catch (FileNotFoundException ex) {
             throw new SerializadorException("No se ha encontrado el archivo");
@@ -105,7 +110,7 @@ public class Repositorio<Clase>{
                     tmp.readFully(cadena);
                     ByteArrayInputStream bis = new ByteArrayInputStream(cadena);
                     ObjectInputStream ois = new ObjectInputStream(bis);
-                    Clase clase = (Clase) ois.readObject();
+                    Objecto clase = (Objecto) ois.readObject();
                 }
                 i += 1;
             }
@@ -145,7 +150,7 @@ public class Repositorio<Clase>{
         
     }
     
-    public void Modificar(int pos, Clase clase) throws SerializadorException{
+    public void Modificar(int pos, Objecto clase) throws SerializadorException{
         ObjectOutputStream ous = null;
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();

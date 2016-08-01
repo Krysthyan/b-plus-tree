@@ -1,20 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package arbolb;
 
 import java.io.Serializable;
 
-/**
- *
- * @author krysthyan
- */
+
 public class Vehiculo implements Serializable{
     private String placa;
     private String marca;
-
 
     public Vehiculo(String placa, String marca) {
         this.placa = placa;
@@ -52,7 +43,7 @@ public class Vehiculo implements Serializable{
     
     @Override
     public String toString(){
-        return "Vehiculo :"+this.placa.toString()+" "+this.marca.toString();
+        return "Vehiculo :"+this.placa+" "+this.marca;
                 
     }
 }
