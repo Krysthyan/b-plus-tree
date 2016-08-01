@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package arbolb.arbol_mas;
 
 import java.io.ByteArrayInputStream;
@@ -15,19 +10,17 @@ import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
-/**
- *
- * @author krysthyan
- * @param <Clase>
- */
+
 public class Repositorio<Clase>{
     private File archivo;
     private int separacion;
+    
     
     public Repositorio(String path,String ruta, int separacion){
         this.archivo = new File(path,ruta);
         this.separacion = separacion;
     }
+    
     
     public int escribir(Clase clase) throws SerializadorException{
         ObjectOutputStream ous = null;
@@ -41,13 +34,14 @@ public class Repositorio<Clase>{
                 throw new SerializadorException("Error de escritura: Se ha ingresado demasiada información");
             }
             byte[] tamCadena= ByteBuffer.allocate(4).putInt(cadenaByte.length).array();
-            RandomAccessFile tmp = new RandomAccessFile(archivo, "rw");
-            long tamArchivo = tmp.length();  
-            long posicionEscritura = (long) Math.ceil(tamArchivo/(float)this.separacion)*this.separacion;
-            tmp.seek(posicionEscritura);
-            tmp.write(tamCadena);
-            tmp.write(cadenaByte);
-            tmp.close();
+            long posicionEscritura;
+            try (RandomAccessFile tmp = new RandomAccessFile(archivo, "rw")) {
+                long tamArchivo = tmp.length();
+                posicionEscritura = (long) Math.ceil(tamArchivo/(float)this.separacion)*this.separacion;
+                tmp.seek(posicionEscritura);
+                tmp.write(tamCadena);
+                tmp.write(cadenaByte);
+            }
             return (int) (posicionEscritura/this.separacion);
         } catch (IOException ex) {
             throw new SerializadorException("Error al leer el archivo");
@@ -61,29 +55,27 @@ public class Repositorio<Clase>{
     }
     
     public Clase leer(int pos) throws SerializadorException{
-        try {
-        RandomAccessFile tmp = new RandomAccessFile(archivo, "r");
-        long size = tmp.length();
-        tmp.seek(pos*this.separacion);
-        byte[] byteTam = new byte[4];
-        tmp.read(byteTam);
-        int tam =   (byteTam[0]<<24)&0xff000000|
-                    (byteTam[1]<<16)&0x00ff0000|
-                    (byteTam[2]<< 8)&0x0000ff00|
-                    (byteTam[3]<< 0)&0x000000ff;
-        if(tam == 0){
-            throw new SerializadorException("No existe un elemento en la posicion solicitada");
-        }
-        if (pos*this.separacion >= tmp.length()){
-           throw new SerializadorException("Error de Indice");
-        }
-        byte[] cadena = new byte[tam];
-        tmp.readFully(cadena);
-        ByteArrayInputStream bis = new ByteArrayInputStream(cadena);
-        ObjectInputStream ois = new ObjectInputStream(bis);
-        Clase clase = (Clase) ois.readObject();
-        tmp.close();
-        return clase;
+        try (RandomAccessFile tmp = new RandomAccessFile(archivo, "r")) {
+            long size = tmp.length();
+            tmp.seek(pos*this.separacion);
+            byte[] byteTam = new byte[4];
+            tmp.read(byteTam);
+            int tam =   (byteTam[0]<<24)&0xff000000|
+                        (byteTam[1]<<16)&0x00ff0000|
+                        (byteTam[2]<< 8)&0x0000ff00|
+                        (byteTam[3]<< 0)&0x000000ff;
+            if(tam == 0){
+                throw new SerializadorException("No existe un elemento en la posicion solicitada");
+            }
+            if (pos*this.separacion >= tmp.length()){
+               throw new SerializadorException("Error de Indice");
+            }
+            byte[] cadena = new byte[tam];
+            tmp.readFully(cadena);
+            ByteArrayInputStream bis = new ByteArrayInputStream(cadena);
+            ObjectInputStream ois = new ObjectInputStream(bis);
+            Clase clase = (Clase) ois.readObject();
+            return clase;
         } catch (FileNotFoundException ex) {
             throw new SerializadorException("No se ha encontrado el archivo");
         } catch (IOException ex) {
@@ -91,6 +83,7 @@ public class Repositorio<Clase>{
         } catch (ClassNotFoundException ex) {
             throw new SerializadorException("Error al leer la información");
         }
+        
     }
     
     public void listar() throws SerializadorException{
@@ -118,16 +111,13 @@ public class Repositorio<Clase>{
             }
         } catch (FileNotFoundException ex) {
             throw new SerializadorException("No se ha encontrado el archivo");
-        } catch (IOException ex) {
-            throw new SerializadorException("Error al leer la información");
-        } catch (ClassNotFoundException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
             throw new SerializadorException("Error al leer la información");
         }
     }
     
     public void eliminar(int pos) throws SerializadorException{
-        try {
-            RandomAccessFile tmp = new RandomAccessFile(this.archivo ,"rwd");
+        try (RandomAccessFile tmp = new RandomAccessFile(this.archivo ,"rwd")) {
             long inicio = pos*this.separacion;
             if (inicio >= tmp.length()){
                 throw new SerializadorException("Error de Indice");
@@ -147,7 +137,6 @@ public class Repositorio<Clase>{
                 tmp.write((byte) 0);
             }
             
-            tmp.close();
         } catch (FileNotFoundException ex) {
             throw new SerializadorException("El archivo no ha sido encontrado");
         } catch (IOException ex) {
@@ -168,16 +157,16 @@ public class Repositorio<Clase>{
                 throw new SerializadorException("Error de modificacion: Se ha ingresado demasiada información");
             }
             byte[] tamCadena= ByteBuffer.allocate(4).putInt(cadenaByte.length).array();
-            RandomAccessFile tmp = new RandomAccessFile(archivo, "rwd");
-            long inicio = pos*this.separacion;
-            if (inicio >= tmp.length()){
-                throw new SerializadorException("Se ha ingresado un indice erróneo");
+            try (RandomAccessFile tmp = new RandomAccessFile(archivo, "rwd")) {
+                long inicio = pos*this.separacion;
+                if (inicio >= tmp.length()){
+                    throw new SerializadorException("Se ha ingresado un indice erróneo");
+                }
+                tmp.seek(pos*this.separacion);
+                long tamArchivo = tmp.length();
+                tmp.write(tamCadena);
+                tmp.write(cadenaByte);
             }
-            tmp.seek(pos*this.separacion);
-            long tamArchivo = tmp.length();  
-            tmp.write(tamCadena);
-            tmp.write(cadenaByte);
-            tmp.close();
         } catch (IOException ex) {
             throw new SerializadorException("Error al escribir la informacion");
         } finally {
@@ -189,24 +178,24 @@ public class Repositorio<Clase>{
         }
     }
 
-    public File getArchivo() {
+    public File obtener_archivo() {
         return archivo;
     }
 
-    public void setArchivo(File archivo) {
+    public void asignar_archivo(File archivo) {
         this.archivo = archivo;
     }
     
-    public void deleteArchivo() throws IOException{
+    public void borrar_archivo() throws IOException{
         RandomAccessFile tmp = new RandomAccessFile(archivo, "rwd");
         tmp.getChannel().truncate(0);
     }
 
-    public int getSeparacion() {
+    public int obtener_separacion() {
         return separacion;
     }
 
-    public void setSeparacion(int separacion) {
+    public void asignar_separacion(int separacion) {
         this.separacion = separacion;
     }
     

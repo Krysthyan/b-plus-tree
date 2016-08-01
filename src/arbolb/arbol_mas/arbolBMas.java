@@ -204,7 +204,7 @@ public class arbolBMas<Clave extends Comparable<Clave>> {
                 return true;
             }else if(nodoHoja.getNumElementos() == 1 && isIgual((Clave) nodoHoja.getElementos()[0].getClave(),clave)){
                 this.raiz = 0;
-                archivo.deleteArchivo();
+                archivo.borrar_archivo();
                 return true;
             }
         }

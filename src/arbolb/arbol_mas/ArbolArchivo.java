@@ -22,7 +22,7 @@ public class ArbolArchivo<Clase> extends Repositorio{
     
     public void setRaiz(int pos) throws ArbolException{
         try {
-            RandomAccessFile tmp = new RandomAccessFile(this.getArchivo(),"rwd"); 
+            RandomAccessFile tmp = new RandomAccessFile(this.obtener_archivo(),"rwd"); 
             byte[] tam = ByteBuffer.allocate(4).putInt(pos).array();
             tmp.seek(0);
             tmp.write(tam);
@@ -36,7 +36,7 @@ public class ArbolArchivo<Clase> extends Repositorio{
     
     public int getRaiz() throws ArbolException{
         try {
-            RandomAccessFile tmp = new RandomAccessFile(this.getArchivo(),"rw"); 
+            RandomAccessFile tmp = new RandomAccessFile(this.obtener_archivo(),"rw"); 
             byte[] pos = new byte[4];
             tmp.seek(0);
             tmp.read(pos);
