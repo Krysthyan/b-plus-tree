@@ -5,10 +5,10 @@
  */
 package arbolb;
 
-import arbolb.arbolPlusPlus.ArbolException;
-import arbolb.arbolPlusPlus.DepositoArchivos;
-import arbolb.arbolPlusPlus.Repositorio;
-import arbolb.arbolPlusPlus.SerializadorException;
+import arbolb.arbol_mas.ArbolException;
+import arbolb.arbol_mas.DepositoArchivos;
+import arbolb.arbol_mas.Repositorio;
+import arbolb.arbol_mas.SerializadorException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
