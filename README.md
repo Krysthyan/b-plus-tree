@@ -29,11 +29,10 @@ guardar, guiarse en la implementación que se encuentra a continuación.
 
 - Este proyecto esta realizado en [netbeans](https://netbeans.org/downloads/).
 
-#### Descargar proyecto y ejecutar en netbeans
+#### Descargar proyecto y ejecutar en netbeans.
 - git clone https://github.com/Krysthyan/Arbol_B_Mas.git
-- cd Arbol_B_Mas
 - Abrir netbeans, dar click en icono de **abrir proyecto** y buscar la ubicación 
-del proyecto que se ha descargado, ejecutamos el proyectto  y puede utilizar el objeto que 
+del proyecto que se ha descargado, ejecutamos el proyecto  y puede utilizar el objeto que 
 esta como ejemplo.
 
 ```java
@@ -77,4 +76,4 @@ public static void menu(){
     System.out.println("7.-Salir");
         
     }
-```
+```     
