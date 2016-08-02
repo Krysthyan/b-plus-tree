@@ -1,3 +1,4 @@
-# ArbolB+
+# Arbol B+
+>implementado en archivos.
 
-Arbol b+ implementado en archivos. La implementación es realizada en archivos de acceso aleatorio serializados
+>La implementación es realizada en archivos de acceso aleatorio serializados
