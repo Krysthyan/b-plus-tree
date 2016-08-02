@@ -18,8 +18,22 @@
 
 ## Como utlizar?
 
+### Utilizar en proyecto nuevo
 - Dentro del proyecto existe un paquete llamado **arbol_b_mas**, copiar dicho
-paquete dentro de tu proyecto y llamar los metodos implementados en paquete **arbol_b_mas**.
+paquete dentro de su proyecto.
+- Llamar la clase _DespositoArchivos<clave, Objeto>_, donde le pasamos como parametros
+la clave que puede ser de cualquier tipo de dato y siguiente el objeto que se desea 
+guardar, guiarse en la implementación que se encuentra a continuación.
+
+### Probar la implementación de este proyecto.
+- Este proyecto esta realizado en [netbeans](https://netbeans.org/downloads/).
+- 
+#### Descargar proyecto y ejecutar en netbeans
+- git clone https://github.com/Krysthyan/Arbol_B_Mas.git
+- cd Arbol_B_Mas
+- Abrir netbeans, dar click en icono de **abrir proyecto** y buscar la ubicación 
+del proyecto que se ha descargado, ejecutamos el proyectto  y puede utilizar el objeto que 
+esta como ejemplo.
 
 ```java
 import arbolb.arbol_b_mas.ArbolException;
