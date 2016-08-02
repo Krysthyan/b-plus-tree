@@ -22,7 +22,7 @@
 
 - Dentro del proyecto existe un paquete llamado **arbol_b_mas**, copiar dicho
 paquete dentro de su proyecto.
-- Llamar la clase _DespositoArchivos<clave, Objeto>_, donde le pasamos como parametros
+- Llamar la clase _DespositoArchivos< clave, Objeto >_, donde le pasamos como parametros
 la clave que puede ser de cualquier tipo de dato y siguiente el objeto que se desea 
 guardar, guiarse en la implementación que se encuentra a continuación.
 
