@@ -1,4 +1,4 @@
-# Implementación del árbol b+ en java.
+# Implementación del árbol b+ en java :deciduous_tree:.
 
 ## Caracteristicas de la implementación.
 
@@ -14,7 +14,6 @@
 
 > extención arbol (.arb), extención de archivo de objetos (.dat).
 
->La implementación es realizada en archivos de acceso aleatorio serializados
 
 ## Como utlizar?
 
@@ -78,6 +77,4 @@ public static void menu(){
     System.out.println("7.-Salir");
         
     }
-
-
 ```
